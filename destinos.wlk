@@ -1,13 +1,8 @@
+import mensajeros.*
 
-
-object PuenteDeBrooklyn {
-
-    method puedePasar(){
-
-    }
+object puenteDeBrooklyn {
+    method puedePasar(mensajero){ return mensajero.pesoTotal() <= 1000 }
 }
-object LaMatrix {
-    method puedePasar(){
-
-    }
+object laMatrix {
+    method puedePasar(mensajero){ return mensajero.puedeLlamar()}
 }

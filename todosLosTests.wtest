@@ -1,0 +1,125 @@
+import empresa.*
+import mensajeros.*
+import paquetes.*
+import destinos.*
+import vehiculos.*
+describe "Tests de Etapa 1" {
+  test "Que roberto (90kg) puede llevar a brooklyn un paquete que está pago en un camión que tiene un acoplado" {
+    paquete.registrarPago()
+    roberto.vehiculo(camion)
+    camion.acoplados(1)
+    roberto.cambiarPeso(90)
+    paquete.destino(puenteDeBrooklyn)
+    assert.that( paquete.puedeEntregarse(roberto) )
+  }
+  test "Que roberto (90kg) no puede llevar a matrix un paquete que está pago en un camión que tiene un acoplado" {
+    paquete.registrarPago()
+    roberto.vehiculo(camion)
+    camion.acoplados(1)
+    roberto.cambiarPeso(90)
+    paquete.destino(laMatrix)
+    assert.notThat( paquete.puedeEntregarse(roberto) )
+  }
+  test "Que neo con crédito no puede llevar un paquete que no está pago a la matrix"{
+    neo.cargarCredito()
+    paquete.destino(laMatrix)
+    paquete.rechazarPago()
+    assert.notThat(paquete.puedeEntregarse(neo))
+  }
+}
+describe "Tests de Etapa 2" {
+  test "Contratar a un mensajero"{
+    mensajeria.contratarUnMensajero(roberto)
+    assert.equals(1, mensajeria.cantidadDeEmpleados())
+  }
+    test "Despedir a un mensajero"{
+    mensajeria.contratarUnMensajero(roberto)
+    mensajeria.despedirUnMensajero(roberto)
+    assert.equals(0, mensajeria.cantidadDeEmpleados())
+  }
+  test "Despedir a todos los mensajeros"{
+    mensajeria.contratarUnMensajero(roberto)
+    mensajeria.contratarUnMensajero(chuckNorris)
+    mensajeria.contratarUnMensajero(neo)
+    mensajeria.despedirATodos()
+    assert.equals(0, mensajeria.cantidadDeEmpleados())
+  }
+   test "Analizar si la mensajeria es grande (si tiene mas de dos mensajeros)"{
+    mensajeria.contratarUnMensajero(roberto)
+    mensajeria.contratarUnMensajero(chuckNorris)
+    mensajeria.contratarUnMensajero(neo)
+    assert.that(mensajeria.esGrande())
+  }
+  test "Consultar si el paquete no puede ser entregado por el primer empleado de la la empresa de mensajería."{
+    mensajeria.contratarUnMensajero(roberto)
+    mensajeria.contratarUnMensajero(chuckNorris)
+    mensajeria.contratarUnMensajero(neo)
+    assert.notThat(mensajeria.elPrimerEmpleadoPuedeEntregar(paquete))
+  }
+  test "El último mensajero de la empresa pesa 0"{
+    mensajeria.contratarUnMensajero(roberto)
+    mensajeria.contratarUnMensajero(chuckNorris)
+    mensajeria.contratarUnMensajero(neo)
+    assert.equals(0, mensajeria.pesoUltimoMensajero())
+  }  
+}
+describe "Tests de Etapa 3" {
+  test "El paquete puede ser entregado por la empresa de mensajería, es decir, al menos uno de sus mensajeros puede entregar el paquete"{
+      paquete.registrarPago()
+      roberto.vehiculo(camion)
+      camion.acoplados(1)
+      roberto.cambiarPeso(90)
+      paquete.destino(puenteDeBrooklyn)
+      mensajeria.contratarUnMensajero(roberto)
+      mensajeria.contratarUnMensajero(chuckNorris)
+      mensajeria.contratarUnMensajero(neo)
+      assert.that(mensajeria.almenosUnMensajeroPuedeEntregar(paquete))
+  }
+  test "Todos los mensajeros que pueden llevar un paquete dado"{
+      paquete.registrarPago()
+      roberto.vehiculo(camion)
+      camion.acoplados(1)
+      roberto.cambiarPeso(90)
+      paquete.destino(puenteDeBrooklyn)
+    mensajeria.contratarUnMensajero(roberto)
+    mensajeria.contratarUnMensajero(chuckNorris)
+    mensajeria.contratarUnMensajero(neo)
+    assert.equals([roberto, chuckNorris, neo], mensajeria.losQuePuedenLlevar(paquete))
+  }
+  test "La mensajería no tiene sobrepeso. Esto sucede si el promedio del peso de los mensajeros es inferior a 500 Kg"{
+    mensajeria.contratarUnMensajero(roberto)
+    mensajeria.contratarUnMensajero(chuckNorris)
+    mensajeria.contratarUnMensajero(neo)
+    assert.equals(175, mensajeria.pesoTotalDeTodosLosMensajeros())
+  }
+          test "Hacer que la empresa de mensajería envíe un paquete. Para ello elige cualquier mensajero entre los que pueden enviarlo y si no puede lo agrega a los paquetes pendientes. (leer también punto siguiente)"{
+    mensajeria.contratarUnMensajero(roberto)
+    mensajeria.contratarUnMensajero(chuckNorris)
+    mensajeria.contratarUnMensajero(neo)
+    assert.equals(175, mensajeria.pesoTotalDeTodosLosMensajeros())
+  }
+         test "Conocer la facturación de la empresa, que es el total ganado por los paquetes enviados."{
+    mensajeria.contratarUnMensajero(roberto)
+    mensajeria.contratarUnMensajero(chuckNorris)
+    mensajeria.contratarUnMensajero(neo)
+    assert.equals(175, mensajeria.pesoTotalDeTodosLosMensajeros())
+  }
+       test "Dado un conjunto de paquetes, enviarlos a todos"{
+    mensajeria.contratarUnMensajero(roberto)
+    mensajeria.contratarUnMensajero(chuckNorris)
+    mensajeria.contratarUnMensajero(neo)
+    assert.equals(175, mensajeria.pesoTotalDeTodosLosMensajeros())
+  }
+       test "Encontrar el paquete pendiente más caro y enviarlo, actualizando los pendientes en caso de haberlo podido enviar."{
+    mensajeria.contratarUnMensajero(roberto)
+    mensajeria.contratarUnMensajero(chuckNorris)
+    mensajeria.contratarUnMensajero(neo)
+    assert.equals(175, mensajeria.pesoTotalDeTodosLosMensajeros())
+  }
+       test "Conocer la facturación de la empresa, que es el total ganado por los paquetes enviados."{
+    mensajeria.contratarUnMensajero(roberto)
+    mensajeria.contratarUnMensajero(chuckNorris)
+    mensajeria.contratarUnMensajero(neo)
+    assert.equals(175, mensajeria.pesoTotalDeTodosLosMensajeros())
+  }
+}

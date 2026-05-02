@@ -1,8 +1,13 @@
+
+
 object bicicleta {
   method peso() = 5
 }
 
 object camion {
-    var property acoplados = 0
+    var  acoplados = 1
+
+    method acoplados(valor){ acoplados=valor }
+
     method peso() = acoplados * 500
 }

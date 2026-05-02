@@ -1,31 +1,25 @@
 
-import destinos.*
 import vehiculos.*
 
-object viaje {
-
-  var mensajero = roberto
-  var vehiculo = true
-
-  method paqueteEntregado(){  }
-
-  method llegoADestino(){  }
-
-  method paquetePago(){  }
-}
-
 object roberto {
-  method peso() = 90
+  var peso = 90
+  var property vehiculo = bicicleta
+  method pesoTotal() = vehiculo.peso() + peso
   method puedeLlamar() = false
+  method cambiarPeso(nuevoPeso){ peso = nuevoPeso }
 }
 
 object chuckNorris {
-  method peso() = 80
+  var peso = 80
+  method pesoTotal() = peso
   method puedeLlamar() = true
 }
 
 object neo {
-  var credito = true
-  method peso() = 0
-  method puedeLlamar() = true
+  var peso = 0
+  var credito = true 
+  method pesoTotal() = peso 
+  method cargarCredito(){ credito = true }
+  method agotarCredito(){ credito = false }  
+  method puedeLlamar() = credito
 }
