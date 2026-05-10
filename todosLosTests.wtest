@@ -76,11 +76,11 @@ describe "Tests de Etapa 3" {
       assert.that(mensajeria.almenosUnMensajeroPuedeEntregar(paquete))
   }
   test "Todos los mensajeros que pueden llevar un paquete dado"{
-      paquete.registrarPago()
-      roberto.vehiculo(camion)
-      camion.acoplados(1)
-      roberto.cambiarPeso(90)
-      paquete.destino(puenteDeBrooklyn)
+    paquete.registrarPago()
+    roberto.vehiculo(camion)
+    camion.acoplados(1)
+    roberto.cambiarPeso(90)
+    paquete.destino(puenteDeBrooklyn)
     mensajeria.contratarUnMensajero(roberto)
     mensajeria.contratarUnMensajero(chuckNorris)
     mensajeria.contratarUnMensajero(neo)
@@ -92,34 +92,59 @@ describe "Tests de Etapa 3" {
     mensajeria.contratarUnMensajero(neo)
     assert.equals(175, mensajeria.pesoTotalDeTodosLosMensajeros())
   }
-          test "Hacer que la empresa de mensajería envíe un paquete. Para ello elige cualquier mensajero entre los que pueden enviarlo y si no puede lo agrega a los paquetes pendientes. (leer también punto siguiente)"{
+  test "Hacer que la empresa de mensajería envíe un paquete. Para ello elige cualquier mensajero entre los que pueden enviarlo y si no puede lo agrega a los paquetes pendientes."{
+    paquete.registrarPago()
+    roberto.vehiculo(camion)
+    camion.acoplados(1000)
+    roberto.cambiarPeso(90)
+    paquete.destino(laMatrix)
+    neo.agotarCredito()
     mensajeria.contratarUnMensajero(roberto)
-    mensajeria.contratarUnMensajero(chuckNorris)
-    mensajeria.contratarUnMensajero(neo)
-    assert.equals(175, mensajeria.pesoTotalDeTodosLosMensajeros())
+    mensajeria.contratarUnMensajero(neo)  
+    mensajeria.sumarUnPaquete(paquete)
+    mensajeria.saberSiElPaquetePuedeEnviarse(paquete)
+    assert.equals([paquete], mensajeria.paquetesPendientes())
   }
-         test "Conocer la facturación de la empresa, que es el total ganado por los paquetes enviados."{
-    mensajeria.contratarUnMensajero(roberto)
-    mensajeria.contratarUnMensajero(chuckNorris)
-    mensajeria.contratarUnMensajero(neo)
-    assert.equals(175, mensajeria.pesoTotalDeTodosLosMensajeros())
+    test "Conocer la facturación de la empresa, que es el total ganado por los paquetes enviados."{
+    mensajeria.sumarUnPaquete(paquete)
+    mensajeria.sumarUnPaquete(paquetito)
+    mensajeria.sumarUnPaquete(paqueton)
+    assert.equals(50, mensajeria.facturacionTotal())
   }
-       test "Dado un conjunto de paquetes, enviarlos a todos"{
+    test "Dado un conjunto de paquetes, enviarlos a todos"{
+    mensajeria.sumarUnPaquete(paquete)
+    mensajeria.sumarUnPaquete(paquetito)
     mensajeria.contratarUnMensajero(roberto)
     mensajeria.contratarUnMensajero(chuckNorris)
     mensajeria.contratarUnMensajero(neo)
-    assert.equals(175, mensajeria.pesoTotalDeTodosLosMensajeros())
+    paquete.registrarPago()
+    roberto.vehiculo(camion)
+    camion.acoplados(1)
+    roberto.cambiarPeso(90)
+    paquete.destino(puenteDeBrooklyn)
+    neo.cargarCredito()  
+    mensajeria.enviarTodosLosPaquetes(mensajeria.paquetes())
+    assert.equals([], mensajeria.paquetes())
   }
-       test "Encontrar el paquete pendiente más caro y enviarlo, actualizando los pendientes en caso de haberlo podido enviar."{
+    test "Encontrar el paquete pendiente más caro y enviarlo, actualizando los pendientes en caso de haberlo podido enviar."{
+    mensajeria.sumarUnPaquetePendiente(paquete)
+    mensajeria.sumarUnPaquetePendiente(paquetito)
+    mensajeria.sumarUnPaquetePendiente(paqueton)
     mensajeria.contratarUnMensajero(roberto)
     mensajeria.contratarUnMensajero(chuckNorris)
-    mensajeria.contratarUnMensajero(neo)
-    assert.equals(175, mensajeria.pesoTotalDeTodosLosMensajeros())
+    mensajeria.contratarUnMensajero(neo)    
+    roberto.vehiculo(camion)
+    camion.acoplados(1)
+    roberto.cambiarPeso(90)
+    paquete.destino(puenteDeBrooklyn)
+    paquete.registrarPago()
+    mensajeria.enviarPaquetePendienteMasCaro()
+    assert.equals([paquetito, paqueton], mensajeria.paquetesPendientes())
   }
-       test "Conocer la facturación de la empresa, que es el total ganado por los paquetes enviados."{
-    mensajeria.contratarUnMensajero(roberto)
-    mensajeria.contratarUnMensajero(chuckNorris)
-    mensajeria.contratarUnMensajero(neo)
-    assert.equals(175, mensajeria.pesoTotalDeTodosLosMensajeros())
+  test "Agregar un nuevo mensajero y un nuevo paquete y garantizar que todo siga funcionando"{
+    mensajeria.sumarUnPaquete(carta)
+    mensajeria.contratarUnMensajero(maraton)
+    mensajeria.saberSiElPaquetePuedeEnviarse(carta)
+    assert.equals([], mensajeria.paquetes())
   }
 }

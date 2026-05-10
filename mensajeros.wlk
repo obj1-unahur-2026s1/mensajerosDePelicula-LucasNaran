@@ -23,3 +23,8 @@ object neo {
   method agotarCredito(){ credito = false }  
   method puedeLlamar() = credito
 }
+object maraton {
+  var peso = 70
+  method pesoTotal() = peso
+  method puedeLlamar() = true
+}

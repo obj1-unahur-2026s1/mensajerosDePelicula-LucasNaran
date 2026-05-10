@@ -30,3 +30,9 @@ object paqueton{
     method puedeEntregarse(mensajero) =
          self.estaPago() and destinos.all( {d => d.puedePasar(mensajero)} ) 
 }
+object carta {
+    var property destino = puenteDeBrooklyn
+    method puedeEntregarse(mensajero) = destino.puedePasar(mensajero)
+     method precio() = 50
+    method estaPago() = true
+}
